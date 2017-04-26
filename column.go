@@ -26,6 +26,12 @@ type Column interface {
 	setTableName(table string) error
 }
 
+// ExpressionColumn はAliasでHAVING句などで使用できる
+type ExpressionColumn interface {
+	Column
+	isExpressionInterface
+}
+
 type NullableColumn bool
 
 const (
@@ -245,8 +251,8 @@ func (c *aliasColumn) setTableName(table string) error {
 		c.name)
 }
 
-// Representation of aliased clauses (expression AS name)
-func Alias(name string, c Expression) Column {
+// Alias is representation of aliased clauses (expression AS name)
+func Alias(name string, c Expression) ExpressionColumn {
 	ac := &aliasColumn{}
 	ac.name = name
 	ac.expression = c
