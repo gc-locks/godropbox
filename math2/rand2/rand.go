@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dropbox/godropbox/container/set"
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/container/set"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 // A Source that can be concurrently used by multiple goroutines.

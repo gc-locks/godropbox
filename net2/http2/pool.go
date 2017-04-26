@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 // A generic interface for HTTP connection pools

@@ -5,7 +5,7 @@ import (
 
 	. "gopkg.in/check.v1"
 
-	"github.com/dropbox/godropbox/net2"
+	"github.com/gc-locks/gosqlbuilder/net2"
 )
 
 // MockShardManager

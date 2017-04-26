@@ -1,8 +1,8 @@
 package binlog
 
 import (
-	"github.com/dropbox/godropbox/errors"
-	mysql_proto "github.com/dropbox/godropbox/proto/mysql"
+	"github.com/gc-locks/gosqlbuilder/errors"
+	mysql_proto "github.com/gc-locks/gosqlbuilder/proto/mysql"
 )
 
 // A representation of the rotate event.  NOTE: Users should ignore rotate

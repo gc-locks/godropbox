@@ -8,7 +8,7 @@ import (
 
 	. "gopkg.in/check.v1"
 
-	"github.com/dropbox/godropbox/time2"
+	"github.com/gc-locks/gosqlbuilder/time2"
 )
 
 // Hook up gocheck into go test runner

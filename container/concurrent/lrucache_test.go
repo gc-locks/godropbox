@@ -1,7 +1,7 @@
 package concurrent
 
 import (
-	. "github.com/dropbox/godropbox/gocheck2"
+	. "github.com/gc-locks/gosqlbuilder/gocheck2"
 	. "gopkg.in/check.v1"
 )
 

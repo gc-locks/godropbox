@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dropbox/godropbox/errors"
-	"github.com/dropbox/godropbox/sync2"
-	//	"github.com/dropbox/godropbox/stopwatch"
+	"github.com/gc-locks/gosqlbuilder/errors"
+	"github.com/gc-locks/gosqlbuilder/sync2"
+	//	"github.com/gc-locks/gosqlbuilder/stopwatch"
 )
 
 var (

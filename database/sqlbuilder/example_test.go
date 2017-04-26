@@ -3,7 +3,7 @@ package sqlbuilder_test
 import (
 	"fmt"
 
-	sb "github.com/dropbox/godropbox/database/sqlbuilder"
+	sb "github.com/gc-locks/gosqlbuilder/database/sqlbuilder"
 )
 
 func Example() {

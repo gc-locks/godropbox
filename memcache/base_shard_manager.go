@@ -4,8 +4,8 @@ import (
 	"expvar"
 	"sync"
 
-	"github.com/dropbox/godropbox/container/set"
-	"github.com/dropbox/godropbox/net2"
+	"github.com/gc-locks/gosqlbuilder/container/set"
+	"github.com/gc-locks/gosqlbuilder/net2"
 )
 
 type MemcachedState int

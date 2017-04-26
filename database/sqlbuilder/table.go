@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 // The sql table read interface.  NOTE: NATURAL JOINs, and join "USING" clause

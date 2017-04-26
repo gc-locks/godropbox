@@ -4,7 +4,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/dropbox/godropbox/cinterop"
+	"github.com/gc-locks/gosqlbuilder/cinterop"
 )
 
 func processBatch(data []byte) []byte {

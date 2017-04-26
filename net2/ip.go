@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 var myHostname string

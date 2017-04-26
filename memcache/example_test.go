@@ -5,8 +5,8 @@ import (
 	"hash/crc32"
 	"net"
 
-	"github.com/dropbox/godropbox/memcache"
-	"github.com/dropbox/godropbox/net2"
+	"github.com/gc-locks/gosqlbuilder/memcache"
+	"github.com/gc-locks/gosqlbuilder/net2"
 )
 
 func ExampleRawBinaryClient() {

@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	rp "github.com/dropbox/godropbox/resource_pool"
+	rp "github.com/gc-locks/gosqlbuilder/resource_pool"
 )
 
 const defaultDialTimeout = 1 * time.Second

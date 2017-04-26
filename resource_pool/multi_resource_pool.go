@@ -3,7 +3,7 @@ package resource_pool
 import (
 	"sync"
 
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 // A resource pool implementation that manages multiple resource location

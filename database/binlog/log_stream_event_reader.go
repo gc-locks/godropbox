@@ -6,7 +6,7 @@ import (
 	"path"
 	"strconv"
 
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 type InvalidRotationError struct {

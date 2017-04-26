@@ -3,8 +3,8 @@ package binlog
 import (
 	"io"
 
-	"github.com/dropbox/godropbox/bufio2"
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/bufio2"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 type rawV4EventReader struct {

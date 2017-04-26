@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/dropbox/godropbox/sync2"
+	"github.com/gc-locks/gosqlbuilder/sync2"
 )
 
 type idleHandle struct {

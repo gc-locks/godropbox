@@ -4,8 +4,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/dropbox/godropbox/errors"
-	"github.com/dropbox/godropbox/resource_pool"
+	"github.com/gc-locks/gosqlbuilder/errors"
+	"github.com/gc-locks/gosqlbuilder/resource_pool"
 )
 
 // Dial's arguments.

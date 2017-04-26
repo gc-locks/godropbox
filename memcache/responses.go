@@ -1,7 +1,7 @@
 package memcache
 
 import (
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 func NewStatusCodeError(status ResponseStatus) error {

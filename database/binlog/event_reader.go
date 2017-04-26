@@ -3,7 +3,7 @@ package binlog
 import (
 	"io"
 
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 type Logger struct {

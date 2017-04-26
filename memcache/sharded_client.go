@@ -2,8 +2,8 @@ package memcache
 
 import (
 	"expvar"
-	"github.com/dropbox/godropbox/errors"
-	"github.com/dropbox/godropbox/net2"
+	"github.com/gc-locks/gosqlbuilder/errors"
+	"github.com/gc-locks/gosqlbuilder/net2"
 )
 
 // A sharded memcache client implementation where sharding management is

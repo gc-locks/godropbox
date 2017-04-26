@@ -16,8 +16,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/dropbox/godropbox/encoding2"
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/encoding2"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 var (

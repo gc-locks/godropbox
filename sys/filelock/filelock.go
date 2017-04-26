@@ -1,7 +1,7 @@
 package filelock
 
 import (
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 	"os"
 	"path"
 	"syscall"

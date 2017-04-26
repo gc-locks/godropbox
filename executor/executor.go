@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 type Request interface {

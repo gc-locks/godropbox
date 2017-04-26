@@ -1,7 +1,7 @@
 package memcache
 
 import (
-	"github.com/dropbox/godropbox/net2"
+	"github.com/gc-locks/gosqlbuilder/net2"
 )
 
 // An item to be gotten from or stored in a memcache server.

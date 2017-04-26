@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/dropbox/godropbox/errors"
-	"github.com/dropbox/godropbox/math2/rand2"
+	"github.com/gc-locks/gosqlbuilder/errors"
+	"github.com/gc-locks/gosqlbuilder/math2/rand2"
 )
 
 const (

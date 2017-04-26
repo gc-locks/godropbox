@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/dropbox/godropbox/errors"
-	mysql_proto "github.com/dropbox/godropbox/proto/mysql"
+	"github.com/gc-locks/gosqlbuilder/errors"
+	mysql_proto "github.com/gc-locks/gosqlbuilder/proto/mysql"
 )
 
 var logFileMagic = []byte("\xfe\x62\x69\x6e")

@@ -3,7 +3,7 @@ package memcache
 import (
 	"sync"
 
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 type MockClient struct {

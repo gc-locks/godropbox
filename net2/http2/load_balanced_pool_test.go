@@ -10,8 +10,8 @@ import (
 
 	. "gopkg.in/check.v1"
 
-	. "github.com/dropbox/godropbox/gocheck2"
-	"github.com/dropbox/godropbox/net2/http2/test_utils"
+	. "github.com/gc-locks/gosqlbuilder/gocheck2"
+	"github.com/gc-locks/gosqlbuilder/net2/http2/test_utils"
 )
 
 func Test(t *testing.T) {

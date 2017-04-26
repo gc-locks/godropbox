@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"math"
 
-	"github.com/dropbox/godropbox/errors"
-	mysql_proto "github.com/dropbox/godropbox/proto/mysql"
+	"github.com/gc-locks/gosqlbuilder/errors"
+	mysql_proto "github.com/gc-locks/gosqlbuilder/proto/mysql"
 )
 
 // This continas field descriptors for string types as defined by sql/field.h.

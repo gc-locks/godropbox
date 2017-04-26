@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"regexp"
 
-	"github.com/dropbox/godropbox/errors"
+	"github.com/gc-locks/gosqlbuilder/errors"
 )
 
 // XXX: Maybe add UIntColumn
