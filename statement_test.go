@@ -5,7 +5,7 @@ import (
 
 	gc "gopkg.in/check.v1"
 
-	"github.com/gc-locks/gosqlbuilder/errors"
+	"github.com/dropbox/godropbox/errors"
 )
 
 type StmtSuite struct {

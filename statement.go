@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"regexp"
 
-	"github.com/gc-locks/gosqlbuilder/errors"
+	"github.com/dropbox/godropbox/errors"
 )
 
 type Statement interface {

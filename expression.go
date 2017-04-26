@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gc-locks/gosqlbuilder/database/sqltypes"
-	"github.com/gc-locks/gosqlbuilder/errors"
+	"github.com/dropbox/godropbox/database/sqltypes"
+	"github.com/dropbox/godropbox/errors"
 )
 
 type orderByClause struct {
