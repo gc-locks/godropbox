@@ -1,11 +1,9 @@
-// A library for generating sql programmatically.
+// Package gosqlbuilder is a library for generating sql programmatically.
 //
 // SQL COMPATIBILITY NOTE: sqlbuilder is designed to generate valid MySQL sql
 // statements.  The generated statements may not work for other sql variants.
 // For instances, the generated statements does not currently work for
 // PostgreSQL since column identifiers are escaped with backquotes.
-// Patches to support other sql flavors are welcome! (see
-// https://godropbox/issues/33 for additional details).
 //
 // Known limitations for SELECT queries:
 //  - does not support subqueries (since mysql is bad at it)
