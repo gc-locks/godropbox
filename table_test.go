@@ -1,4 +1,4 @@
-package sqlbuilder
+package gosqlbuilder
 
 import (
 	"bytes"

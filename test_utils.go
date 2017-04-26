@@ -1,4 +1,4 @@
-package sqlbuilder
+package gosqlbuilder
 
 var table1Col1 = IntColumn("col1", Nullable)
 var table1Col2 = IntColumn("col2", Nullable)

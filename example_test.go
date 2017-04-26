@@ -1,4 +1,4 @@
-package sqlbuilder_test
+package gosqlbuilder_test
 
 import (
 	"fmt"

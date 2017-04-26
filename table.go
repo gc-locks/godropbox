@@ -1,6 +1,6 @@
 // Modeling of tables.  This is where query preparation starts
 
-package sqlbuilder
+package gosqlbuilder
 
 import (
 	"bytes"

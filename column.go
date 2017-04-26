@@ -1,6 +1,6 @@
 // Modeling of columns
 
-package sqlbuilder
+package gosqlbuilder
 
 import (
 	"bytes"

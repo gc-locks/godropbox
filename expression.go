@@ -1,5 +1,5 @@
 // Query building functions for expression components
-package sqlbuilder
+package gosqlbuilder
 
 import (
 	"bytes"
