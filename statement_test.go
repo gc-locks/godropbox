@@ -142,6 +142,25 @@ func (s *StmtSuite) TestSelectGroupBy(c *gc.C) {
 			"FROM `db`.`table1` GROUP BY `table1`.`col1`,`table1`.`col2`")
 }
 
+func (s *StmtSuite) TestSelectHaving(c *gc.C) {
+	q := table1.Select(
+		table1Col1,
+		table1Col2,
+		Alias("total", SqlFunc("sum", table1Col3)))
+	q.GroupBy(table1Col1, table1Col2)
+	q.Having(GtL(table1Col1, 123))
+	sql, err := q.String("db")
+
+	c.Assert(err, gc.IsNil)
+	c.Assert(
+		sql,
+		gc.Equals,
+		"SELECT `table1`.`col1`,`table1`.`col2`,"+
+			"(sum(`table1`.`col3`)) AS `total` "+
+			"FROM `db`.`table1` GROUP BY `table1`.`col1`,`table1`.`col2` "+
+			"HAVING `table1`.`col1`>123")
+}
+
 func (s *StmtSuite) TestSelectSingleOrderBy(c *gc.C) {
 	q := table1.Select(table1Col1, table1Col2).OrderBy(table1Col2)
 	sql, err := q.String("db")

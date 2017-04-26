@@ -19,6 +19,7 @@ type SelectStatement interface {
 	Where(expression BoolExpression) SelectStatement
 	AndWhere(expression BoolExpression) SelectStatement
 	GroupBy(expressions ...Expression) SelectStatement
+	Having(expression BoolExpression) SelectStatement
 	OrderBy(clauses ...OrderByClause) SelectStatement
 	Limit(limit int64) SelectStatement
 	Distinct() SelectStatement
@@ -53,6 +54,7 @@ type UnionStatement interface {
 	Where(expression BoolExpression) UnionStatement
 	AndWhere(expression BoolExpression) UnionStatement
 	GroupBy(expressions ...Expression) UnionStatement
+	Having(expression BoolExpression) UnionStatement
 	OrderBy(clauses ...OrderByClause) UnionStatement
 
 	Limit(limit int64) UnionStatement
@@ -125,7 +127,7 @@ func UnionAll(selects ...SelectStatement) UnionStatement {
 // Similar to selectStatementImpl, but less complete
 type unionStatementImpl struct {
 	selects       []SelectStatement
-	where         BoolExpression
+	where, having BoolExpression
 	group         *listClause
 	order         *listClause
 	limit, offset int64
@@ -158,6 +160,11 @@ func (us *unionStatementImpl) GroupBy(
 	for i, e := range expressions {
 		us.group.clauses[i] = e
 	}
+	return us
+}
+
+func (us *unionStatementImpl) Having(expression BoolExpression) UnionStatement {
+	us.having = expression
 	return us
 }
 
@@ -253,6 +260,13 @@ func (us *unionStatementImpl) String(database string) (sql string, err error) {
 		}
 	}
 
+	if us.having != nil {
+		_, _ = buf.WriteString(" HAVING ")
+		if err = us.having.SerializeSql(buf); err != nil {
+			return
+		}
+	}
+
 	if us.order != nil {
 		_, _ = buf.WriteString(" ORDER BY ")
 		if err = us.order.SerializeSql(buf); err != nil {
@@ -295,7 +309,7 @@ func newSelectStatement(
 type selectStatementImpl struct {
 	table          ReadableTable
 	projections    []Projection
-	where          BoolExpression
+	where, having  BoolExpression
 	group          *listClause
 	order          *listClause
 	comment        string
@@ -337,6 +351,11 @@ func (q *selectStatementImpl) GroupBy(
 	for i, e := range expressions {
 		q.group.clauses[i] = e
 	}
+	return q
+}
+
+func (q *selectStatementImpl) Having(expression BoolExpression) SelectStatement {
+	q.having = expression
 	return q
 }
 
@@ -437,6 +456,13 @@ func (q *selectStatementImpl) String(database string) (sql string, err error) {
 	if q.group != nil {
 		_, _ = buf.WriteString(" GROUP BY ")
 		if err = q.group.SerializeSql(buf); err != nil {
+			return
+		}
+	}
+
+	if q.having != nil {
+		_, _ = buf.WriteString(" HAVING ")
+		if err = q.having.SerializeSql(buf); err != nil {
 			return
 		}
 	}
