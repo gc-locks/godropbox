@@ -95,6 +95,51 @@ func (c *baseColumn) SerializeSql(out *bytes.Buffer) error {
 	return c.SerializeSqlForColumnList(out)
 }
 
+func clone(c interface{}) (NonAliasColumn, error) {
+	switch c.(type) {
+	case *bytesColumn:
+		c := c.(*bytesColumn)
+		return BytesColumn(
+			c.name,
+			c.nullable,
+		), nil
+	case *stringColumn:
+		c := c.(*stringColumn)
+		return StrColumn(
+			c.name,
+			c.charset,
+			c.collation,
+			c.nullable,
+		), nil
+	case *dateTimeColumn:
+		c := c.(*dateTimeColumn)
+		return DateTimeColumn(
+			c.name,
+			c.nullable,
+		), nil
+	case *integerColumn:
+		c := c.(*integerColumn)
+		return IntColumn(
+			c.name,
+			c.nullable,
+		), nil
+	case *doubleColumn:
+		c := c.(*doubleColumn)
+		return DoubleColumn(
+			c.name,
+			c.nullable,
+		), nil
+	case *booleanColumn:
+		c := c.(*booleanColumn)
+		return BoolColumn(
+			c.name,
+			c.nullable,
+		), nil
+	default:
+		panic("not implemented type")
+	}
+}
+
 type bytesColumn struct {
 	baseColumn
 	isExpression

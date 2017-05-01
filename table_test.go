@@ -207,3 +207,31 @@ func (s *TableSuite) TestNestedRightJoin(c *gc.C) {
 			"JOIN `db`.`table2` ON `table1`.`col3`=`table2`.`col3` "+
 			"RIGHT JOIN `db`.`table3` ON `table1`.`col1`=`table3`.`col1`")
 }
+
+func (s *TableSuite) TestAlias(c *gc.C) {
+	t2, err := table2.Alias("a1")
+	if err != nil {
+		c.Fatal("error occurred")
+	}
+
+	t3, err := table3.Alias("a2")
+	if err != nil {
+		c.Fatal("error occurred")
+	}
+
+	join1 := table1.InnerJoinOn(t2, Eq(table1Col3, t2.columns[0]))
+	join2 := join1.RightJoinOn(t3, Eq(table1Col1, t3.columns[0]))
+
+	buf := &bytes.Buffer{}
+
+	err = join2.SerializeSql("db", buf)
+	c.Assert(err, gc.IsNil)
+
+	sql := buf.String()
+	c.Assert(
+		sql,
+		gc.Equals,
+		"`db`.`table1` "+
+			"JOIN `db`.`table2` AS `a1` ON `table1`.`col3`=`a1`.`col3` "+
+			"RIGHT JOIN `db`.`table3` AS `a2` ON `table1`.`col1`=`a2`.`col1`")
+}
