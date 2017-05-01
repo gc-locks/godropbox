@@ -77,6 +77,7 @@ func NewTable(name string, columns ...NonAliasColumn) *Table {
 
 type Table struct {
 	name         string
+	alias        string
 	columns      []NonAliasColumn
 	columnLookup map[string]NonAliasColumn
 	// If not empty, the name of the index to force
@@ -116,6 +117,14 @@ func (t *Table) Name() string {
 	return t.name
 }
 
+// Returns the table's alias in the database, if alias is set
+func (t *Table) Alias() string {
+	if t.alias != "" {
+		return t.alias
+	}
+	return t.name
+}
+
 // Returns a list of the table's columns
 func (t *Table) Columns() []NonAliasColumn {
 	return t.columns
@@ -136,6 +145,11 @@ func (t *Table) SerializeSql(database string, out *bytes.Buffer) error {
 	_, _ = out.WriteString("`.`")
 	_, _ = out.WriteString(t.Name())
 	_, _ = out.WriteString("`")
+	if t.alias != "" {
+		_, _ = out.WriteString(" AS `")
+		_, _ = out.WriteString(t.alias)
+		_, _ = out.WriteString("`")
+	}
 
 	if t.forcedIndex != "" {
 		if !validIdentifierName(t.forcedIndex) {
@@ -188,6 +202,17 @@ func (t *Table) Update() UpdateStatement {
 
 func (t *Table) Delete() DeleteStatement {
 	return newDeleteStatement(t)
+}
+
+func (t *Table) SetAlias(alias string) error {
+	if alias == "" {
+		return errors.Newf("Alias is empty in table '%s'", t.name)
+	}
+	t.alias = alias
+	for _, c := range t.columns {
+		c.setTableName(alias)
+	}
+	return nil
 }
 
 type joinType int
