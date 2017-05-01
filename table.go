@@ -77,6 +77,7 @@ func NewTable(name string, columns ...NonAliasColumn) *Table {
 
 type Table struct {
 	name         string
+	alias        string
 	columns      []NonAliasColumn
 	columnLookup map[string]NonAliasColumn
 	// If not empty, the name of the index to force
@@ -136,6 +137,11 @@ func (t *Table) SerializeSql(database string, out *bytes.Buffer) error {
 	_, _ = out.WriteString("`.`")
 	_, _ = out.WriteString(t.Name())
 	_, _ = out.WriteString("`")
+	if t.alias != "" {
+		_, _ = out.WriteString(" AS `")
+		_, _ = out.WriteString(t.alias)
+		_, _ = out.WriteString("`")
+	}
 
 	if t.forcedIndex != "" {
 		if !validIdentifierName(t.forcedIndex) {
@@ -188,6 +194,35 @@ func (t *Table) Update() UpdateStatement {
 
 func (t *Table) Delete() DeleteStatement {
 	return newDeleteStatement(t)
+}
+
+func (t *Table) Alias(alias string) *Table {
+	if alias == "" {
+		panic(fmt.Sprintf("Alias is empty in table '%s'", t.name))
+	}
+
+	cloned := &Table{
+		name:         t.name,
+		alias:        alias,
+		columnLookup: make(map[string]NonAliasColumn),
+	}
+
+	for _, c := range t.columns {
+		copied, err := clone(c)
+		if err != nil {
+			panic(err)
+		}
+
+		err = copied.setTableName(alias)
+		if err != nil {
+			panic(err)
+		}
+
+		cloned.columnLookup[copied.Name()] = copied
+		cloned.columns = append(cloned.columns, copied)
+	}
+
+	return cloned
 }
 
 type joinType int
