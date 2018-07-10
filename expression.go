@@ -297,7 +297,7 @@ func (c *funcExpression) SerializeSql(out *bytes.Buffer) (err error) {
 	return nil
 }
 
-// Returns a representation of sql function call "func_call(c[0], ..., c[n-1])
+// Returns a representation of sql function call "func_call(c[0], ..., c[n-1])"
 func SqlFunc(funcName string, expressions ...Expression) Expression {
 	f := &funcExpression{
 		funcName: funcName,
@@ -311,6 +311,25 @@ func SqlFunc(funcName string, expressions ...Expression) Expression {
 		f.args = &listClause{
 			clauses:            args,
 			includeParentheses: true,
+		}
+	}
+	return f
+}
+
+// Distinct Returns a representation of sql function call "DISTINCT c[0], ..., c[n-1]"
+func Distinct(expressions ...Expression) Expression {
+	f := &funcExpression{
+		funcName: "DISTINCT",
+	}
+	if len(expressions) > 0 {
+		args := make([]Clause, len(expressions), len(expressions))
+		for i, expr := range expressions {
+			args[i] = expr
+		}
+
+		f.args = &listClause{
+			clauses:            args,
+			includeParentheses: false,
 		}
 	}
 	return f
