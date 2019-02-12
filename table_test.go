@@ -141,6 +141,21 @@ func (s *TableSuite) TestRightJoin(c *gc.C) {
 			"ON `table1`.`col3`=`table2`.`col3`")
 }
 
+func (s *TableSuite) TestCrossJoin(c *gc.C) {
+	join := table1.CrossJoinOn(table2)
+
+	buf := &bytes.Buffer{}
+
+	err := join.SerializeSql("db", buf)
+	c.Assert(err, gc.IsNil)
+
+	sql := buf.String()
+	c.Assert(
+		sql,
+		gc.Equals,
+		"`db`.`table1` CROSS JOIN `db`.`table2`"	)
+}
+
 func (s *TableSuite) TestJoinColumns(c *gc.C) {
 	join := table1.RightJoinOn(table2, Eq(table1Col3, table2Col3))
 
@@ -209,22 +224,16 @@ func (s *TableSuite) TestNestedRightJoin(c *gc.C) {
 }
 
 func (s *TableSuite) TestAlias(c *gc.C) {
-	t2, err := table2.Alias("a1")
-	if err != nil {
-		c.Fatal("error occurred")
-	}
+	t2 := table2.Alias("a1")
 
-	t3, err := table3.Alias("a2")
-	if err != nil {
-		c.Fatal("error occurred")
-	}
+	t3 := table3.Alias("a2")
 
 	join1 := table1.InnerJoinOn(t2, Eq(table1Col3, t2.columns[0]))
 	join2 := join1.RightJoinOn(t3, Eq(table1Col1, t3.columns[0]))
 
 	buf := &bytes.Buffer{}
 
-	err = join2.SerializeSql("db", buf)
+	err := join2.SerializeSql("db", buf)
 	c.Assert(err, gc.IsNil)
 
 	sql := buf.String()

@@ -31,6 +31,9 @@ type ReadableTable interface {
 
 	// Creates a right join table expression using onCondition.
 	RightJoinOn(table ReadableTable, onCondition BoolExpression) ReadableTable
+
+	// Creates a cross join table expression.
+	CrossJoinOn(table ReadableTable) ReadableTable
 }
 
 // The sql table write interface.
@@ -184,6 +187,13 @@ func (t *Table) RightJoinOn(
 	return RightJoinOn(t, table, onCondition)
 }
 
+// Creates a inner join table expression using onCondition.
+func (t *Table) CrossJoinOn(
+	table ReadableTable) ReadableTable {
+
+	return CrossJoinOn(t, table)
+}
+
 func (t *Table) Insert(columns ...NonAliasColumn) InsertStatement {
 	return newInsertStatement(t, columns...)
 }
@@ -231,6 +241,7 @@ const (
 	INNER_JOIN joinType = iota
 	LEFT_JOIN
 	RIGHT_JOIN
+	CROSS_JOIN
 )
 
 // Join expressions are pseudo readable tables.
@@ -279,6 +290,13 @@ func RightJoinOn(
 	return newJoinTable(lhs, rhs, RIGHT_JOIN, onCondition)
 }
 
+func CrossJoinOn(
+	lhs ReadableTable,
+	rhs ReadableTable) ReadableTable {
+
+	return newJoinTable(lhs, rhs, CROSS_JOIN, nil)
+}
+
 func (t *joinTable) Columns() []NonAliasColumn {
 	columns := make([]NonAliasColumn, 0)
 	columns = append(columns, t.lhs.Columns()...)
@@ -297,7 +315,7 @@ func (t *joinTable) SerializeSql(
 	if t.rhs == nil {
 		return errors.Newf("nil rhs.  Generated sql: %s", out.String())
 	}
-	if t.onCondition == nil {
+	if t.onCondition == nil && t.join_type != CROSS_JOIN {
 		return errors.Newf("nil onCondition.  Generated sql: %s", out.String())
 	}
 
@@ -312,15 +330,19 @@ func (t *joinTable) SerializeSql(
 		_, _ = out.WriteString(" LEFT JOIN ")
 	case RIGHT_JOIN:
 		_, _ = out.WriteString(" RIGHT JOIN ")
+	case CROSS_JOIN:
+		_, _ = out.WriteString(" CROSS JOIN ")
 	}
 
 	if err = t.rhs.SerializeSql(database, out); err != nil {
 		return
 	}
 
-	_, _ = out.WriteString(" ON ")
-	if err = t.onCondition.SerializeSql(out); err != nil {
-		return
+	if t.join_type != CROSS_JOIN {
+		_, _ = out.WriteString(" ON ")
+		if err = t.onCondition.SerializeSql(out); err != nil {
+			return
+		}
 	}
 
 	return nil
@@ -349,4 +371,10 @@ func (t *joinTable) RightJoinOn(
 	onCondition BoolExpression) ReadableTable {
 
 	return RightJoinOn(t, table, onCondition)
+}
+
+func (t *joinTable) CrossJoinOn(
+	table ReadableTable) ReadableTable {
+
+	return CrossJoinOn(t, table)
 }
