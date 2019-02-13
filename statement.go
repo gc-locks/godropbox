@@ -38,6 +38,7 @@ type InsertStatement interface {
 	AddOnDuplicateKeyUpdate(col NonAliasColumn, expr Expression) InsertStatement
 	Comment(comment string) InsertStatement
 	IgnoreDuplicates(ignore bool) InsertStatement
+	Select(valueSelect SelectStatement) InsertStatement
 }
 
 // By default, rows selected by a UNION statement are out-of-order
@@ -500,9 +501,9 @@ func newInsertStatement(
 	columns ...NonAliasColumn) InsertStatement {
 
 	return &insertStatementImpl{
-		table:   t,
-		columns: columns,
-		rows:    make([][]Expression, 0, 1),
+		table:                 t,
+		columns:               columns,
+		rows:                  make([][]Expression, 0, 1),
 		onDuplicateKeyUpdates: make([]columnAssignment, 0, 0),
 	}
 }
@@ -519,6 +520,7 @@ type insertStatementImpl struct {
 	onDuplicateKeyUpdates []columnAssignment
 	comment               string
 	ignore                bool
+	valusSelect           SelectStatement
 }
 
 func (s *insertStatementImpl) Add(
@@ -546,6 +548,11 @@ func (s *insertStatementImpl) IgnoreDuplicates(ignore bool) InsertStatement {
 
 func (s *insertStatementImpl) Comment(comment string) InsertStatement {
 	s.comment = comment
+	return s
+}
+
+func (s *insertStatementImpl) Select(valueSelect SelectStatement) InsertStatement {
+	s.valusSelect = valueSelect
 	return s
 }
 
@@ -596,42 +603,52 @@ func (s *insertStatementImpl) String(database string) (sql string, err error) {
 		}
 	}
 
-	if len(s.rows) == 0 {
-		return "", errors.Newf(
-			"No row specified.  Generated sql: %s",
-			buf.String())
-	}
-
-	_, _ = buf.WriteString(") VALUES (")
-	for row_i, row := range s.rows {
-		if row_i > 0 {
-			_, _ = buf.WriteString(", (")
+	if s.valusSelect != nil {
+		_, _ = buf.WriteString(") (")
+		selectSql, err := s.valusSelect.String(database)
+		if err != nil {
+			return "", err
 		}
-
-		if len(row) != len(s.columns) {
+		_, _ = buf.WriteString(selectSql)
+		_, _ = buf.WriteString(")")
+	} else {
+		if len(s.rows) == 0 {
 			return "", errors.Newf(
-				"# of values does not match # of columns.  Generated sql: %s",
+				"No row specified.  Generated sql: %s",
 				buf.String())
 		}
 
-		for col_i, value := range row {
-			if col_i > 0 {
-				_ = buf.WriteByte(',')
+		_, _ = buf.WriteString(") VALUES (")
+		for row_i, row := range s.rows {
+			if row_i > 0 {
+				_, _ = buf.WriteString(", (")
 			}
 
-			if value == nil {
+			if len(row) != len(s.columns) {
 				return "", errors.Newf(
-					"nil value in row %d col %d.  Generated sql: %s",
-					row_i,
-					col_i,
+					"# of values does not match # of columns.  Generated sql: %s",
 					buf.String())
 			}
 
-			if err = value.SerializeSql(buf); err != nil {
-				return
+			for col_i, value := range row {
+				if col_i > 0 {
+					_ = buf.WriteByte(',')
+				}
+
+				if value == nil {
+					return "", errors.Newf(
+						"nil value in row %d col %d.  Generated sql: %s",
+						row_i,
+						col_i,
+						buf.String())
+				}
+
+				if err = value.SerializeSql(buf); err != nil {
+					return
+				}
 			}
+			_ = buf.WriteByte(')')
 		}
-		_ = buf.WriteByte(')')
 	}
 
 	if len(s.onDuplicateKeyUpdates) > 0 {

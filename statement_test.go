@@ -402,6 +402,17 @@ func (s *StmtSuite) TestOnDuplicateKeyUpdateMulti(c *gc.C) {
 			"ON DUPLICATE KEY UPDATE `table1`.`col3`=3, `table1`.`col2`=4")
 }
 
+func (s *StmtSuite) TestInsertSelect(c *gc.C) {
+	stmt := table1.Insert(table1Col1).Select(table1.Select(table1Col1))
+	sql, err := stmt.String("db")
+	c.Assert(err, gc.IsNil)
+
+	c.Assert(
+		sql,
+		gc.Equals,
+		"INSERT INTO `db`.`table1` (`table1`.`col1`) (SELECT `table1`.`col1` FROM `db`.`table1`)")
+}
+
 //
 // UPDATE statement tests =====================================================
 //
